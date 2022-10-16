@@ -218,7 +218,7 @@ tabsContainer.addEventListener('click', function (e) {
         'operations__tab--active'
       ),
       switchVisibleEl(
-        this.parentElement.querySelectorAll('.operations__content'),
+        tabsContent,
         filterTabToDisplay(tabsContent, e.target.dataset.tab),
 
         'operations__content--active'
@@ -230,9 +230,7 @@ tabsContainer.addEventListener('click', function (e) {
         'operations__tab--active'
       ),
       switchVisibleEl(
-        this.parentElement.parentElement.querySelectorAll(
-          '.operations__content'
-        ),
+        tabsContent,
         filterTabToDisplay(tabsContent, e.target.closest('.btn').dataset.tab),
 
         'operations__content--active'
