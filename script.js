@@ -159,28 +159,73 @@ const switchVisibleEl = (elementsArray, elementToShow, classToSwitch) => (
 //AFTER REFACTOR
 
 //importantComment TABS IMPLEMENTATION
+//BEFORE REFACTOR
+// tabsContainer.addEventListener('click', function (e) {
+//   if (!e.target.closest('.btn')) return;
+//   return e.target.classList.contains('btn')
+//     ? (switchVisibleEl(
+//         this.querySelectorAll('.btn'),
+//         e.target || e.target.closest('.btn'),
+//         'operations__tab--active'
+//       ),
+//       switchVisibleEl(
+//         this.parentElement.querySelectorAll('.operations__content'),
+//         [...this.parentElement.querySelectorAll('.operations__content')].filter(
+//           content =>
+//             content.classList.contains(
+//               `operations__content--${e.target.dataset.tab}`
+//             )
+//         )[0],
+//         'operations__content--active'
+//       ))
+//     : e.target.closest('.btn').classList.contains('btn')
+//     ? (console.log(e.target),
+//       switchVisibleEl(
+//         this.querySelectorAll('.btn'),
+//         e.target.closest('.btn'),
+//         'operations__tab--active'
+//       ),
+//       switchVisibleEl(
+//         this.parentElement.parentElement.querySelectorAll(
+//           '.operations__content'
+//         ),
+//         [...this.parentElement.querySelectorAll('.operations__content')].filter(
+//           content =>
+//             content.classList.contains(
+//               `operations__content--${e.target.closest('.btn').dataset.tab}`
+//             )
+//         )[0],
+//         'operations__content--active'
+//       ))
+//     : null;
+// });
+//BEFORE REFACTOR
+//AFTER REFACTOR
+const filterTabToDisplay = (tabs, tabIndex) =>
+  tabs.filter(tab =>
+    tab.classList.contains(`operations__content--${tabIndex}`)
+  )[0];
 tabsContainer.addEventListener('click', function (e) {
+  const tabsContent = [
+    ...this.parentElement.querySelectorAll('.operations__content'),
+  ];
+  const tabsButtons = this.querySelectorAll('.btn');
   if (!e.target.closest('.btn')) return;
   return e.target.classList.contains('btn')
     ? (switchVisibleEl(
-        this.querySelectorAll('.btn'),
+        tabsButtons,
         e.target || e.target.closest('.btn'),
         'operations__tab--active'
       ),
       switchVisibleEl(
         this.parentElement.querySelectorAll('.operations__content'),
-        [...this.parentElement.querySelectorAll('.operations__content')].filter(
-          content =>
-            content.classList.contains(
-              `operations__content--${e.target.dataset.tab}`
-            )
-        )[0],
+        filterTabToDisplay(tabsContent, e.target.dataset.tab),
+
         'operations__content--active'
       ))
     : e.target.closest('.btn').classList.contains('btn')
-    ? (console.log(e.target),
-      switchVisibleEl(
-        this.querySelectorAll('.btn'),
+    ? (switchVisibleEl(
+        tabsButtons,
         e.target.closest('.btn'),
         'operations__tab--active'
       ),
@@ -188,16 +233,13 @@ tabsContainer.addEventListener('click', function (e) {
         this.parentElement.parentElement.querySelectorAll(
           '.operations__content'
         ),
-        [...this.parentElement.querySelectorAll('.operations__content')].filter(
-          content =>
-            content.classList.contains(
-              `operations__content--${e.target.closest('.btn').dataset.tab}`
-            )
-        )[0],
+        filterTabToDisplay(tabsContent, e.target.closest('.btn').dataset.tab),
+
         'operations__content--active'
       ))
     : null;
 });
+//AFTER REFACTOR
 //importantComment TABS IMPLEMENTATION
 //IMPLEMENTING TABS SECTION
 //LECTURE
