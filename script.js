@@ -449,6 +449,7 @@ for (let index = 0; index < 3; index++) {
   }' data-slide=${0}></button>`;
   dotsContainer.insertAdjacentHTML('beforeend', dots);
 }
+
 //SETTING DOTS
 //SETTING ARROWS SLIDES ACTIONS
 const arrowBtns = [
@@ -470,11 +471,10 @@ rightBtn.addEventListener('click', function (e) {
         (slide, i, arr) =>
           (i === 0 && (slide.style.translate = `${parseInt(i)}%`)) ||
           (slide.style.translate = `${parseInt(i * 100)}%`)
-
-        // (slide.style.translate = `${parseInt(
-        //   arr[arr.length - i - 1].style.translate
-        // )}%`)
       );
+  setActiveClassDots(
+    slides.findIndex(slide => parseInt(slide.style.translate) === 0)
+  );
 });
 leftBtn.addEventListener('click', function (e) {
   const switchBoolean = parseInt(slides[0].style.translate) === 0;
@@ -488,12 +488,18 @@ leftBtn.addEventListener('click', function (e) {
           (i === arr.length - 1 &&
             (slide.style.translate = `${parseInt(0)}%`)) ||
           (slide.style.translate = `${parseInt(arr.length - i - 1) * -100}%`)
-
-        // (slide.style.translate = `${parseInt(
-        //   arr[arr.length - i - 1].style.translate
-        // )}%`)
       );
+  setActiveClassDots(
+    slides.findIndex(slide => parseInt(slide.style.translate) === 0)
+  );
 });
+const setActiveClassDots = activeSlide =>
+  [...dotsContainer.children].forEach((dot, index) => {
+    index !== activeSlide
+      ? dot.classList.remove('dots__dot--active')
+      : dot.classList.add('dots__dot--active');
+  });
+
 // arrowBtns.forEach(btn => {
 //   btn.addEventListener('click', function (e) {
 
