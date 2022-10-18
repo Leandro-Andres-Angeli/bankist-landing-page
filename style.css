@@ -395,6 +395,9 @@ h4 {
 
   /* THIS creates the animation! */
   transition: transform 1s;
+  /* TRANSITION FOR NEWER TRANSLATE CSS PROPERTY */
+  transition: translate 1s;
+  /* TRANSITION FOR NEWER TRANSLATE CSS PROPERTY */
 }
 
 .slide > img {

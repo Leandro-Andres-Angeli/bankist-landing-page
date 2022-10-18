@@ -251,14 +251,14 @@ tabsContainer.addEventListener('click', function (e) {
 const setOpacityNavItem = (el, opacity = 1) =>
   el.style ? (el.style.opacity = opacity) : null;
 //SETTING OPACTIY ON HOVER OR MOUSEOUT
-nav.addEventListener('mouseover', e => {
-  console.log(e.currentTarget.querySelector('img'));
+function handleHoverNav(e, notTargetOpacity) {
+  // console.log(e.currentTarget.querySelector('img'));
 
   const navLinks = [
     ...e.currentTarget.querySelectorAll('li'),
     e.currentTarget.querySelector('img'),
   ];
-  console.log(navLinks);
+  // console.log(navLinks);
   e.target.classList.contains('nav__link')
     ? navLinks
         //BEFORE REFACTOR
@@ -278,18 +278,228 @@ nav.addEventListener('mouseover', e => {
                 e.target.getAttribute('href')) ||
             !el.firstElementChild
           )
-            setOpacityNavItem(el, 0.5);
+            setOpacityNavItem(el, notTargetOpacity);
         })
     : //AFTER REFACTOR
       null;
+}
+//FINISHED FINAL REFACTOR
+nav.addEventListener('mouseover', function (e) {
+  handleHoverNav(e, 0.5);
 });
+//FINISHED FINAL REFACTOR
 nav.addEventListener('mouseout', function (e) {
-  return [
-    e.currentTarget.querySelector('img'),
-    ...e.currentTarget.querySelectorAll('li'),
-  ].forEach(el => setOpacityNavItem(el, undefined));
+  handleHoverNav(e, 1);
 });
+// nav.addEventListener('mouseover', e => {
+//   console.log(e.currentTarget.querySelector('img'));
+
+//   const navLinks = [
+//     ...e.currentTarget.querySelectorAll('li'),
+//     e.currentTarget.querySelector('img'),
+//   ];
+//   console.log(navLinks);
+//   e.target.classList.contains('nav__link')
+//     ? navLinks
+//         //BEFORE REFACTOR
+//         // .filter(el => {
+//         //   return (
+//         //     el.firstElementChild.getAttribute('href') !==
+//         //     e.target.getAttribute('href')
+//         //   );
+//         // })
+//         // .concat(e.currentTarget.querySelector('img'))
+//         //BEFORE REFACTOR
+//         //AFTER REFACTOR
+//         .forEach(el => {
+//           if (
+//             (el.firstElementChild &&
+//               el.firstElementChild.getAttribute('href') !==
+//                 e.target.getAttribute('href')) ||
+//             !el.firstElementChild
+//           )
+//             setOpacityNavItem(el, 0.5);
+//         })
+//     : //AFTER REFACTOR
+//       null;
+// });
+
+// nav.addEventListener('mouseout', function (e) {
+//   return [
+//     e.currentTarget.querySelector('img'),
+//     ...e.currentTarget.querySelectorAll('li'),
+//   ].forEach(el => setOpacityNavItem(el, undefined));
+// });
 
 //IMPLEMENTING LIGHTER OPACITY IN ELEMENTS OF NAV EXCEPT IN THE ONE THATS HOVERED
 //WORKING
 //LECTURE
+//LECTURE
+//STICKY NAVIGATION
+//ALTERNATE WAY OFF GETTIG OFFSET TOP ELEMENT COORDS
+const { top: coordTop0 } = section1.getBoundingClientRect();
+//THEN COMPARE IT'S VALUE TO WINDOW.SCROLLY
+//ALTERNATE WAY OFF GETTIG OFFSET TOP ELEMENT COORDS
+const switchStickyNavClass = scrollPositionTrigger => {
+  return scrollPositionTrigger
+    ? nav.classList.add('sticky')
+    : nav.classList.remove('sticky');
+};
+//REFACTORED TO INTERSECTION OBSERVER API BECAUSE OF MUCH BETTER PERFORMANCE
+// window.addEventListener('scroll', () =>
+//   switchStickyNavClass(window.scrollY >= section1.offsetTop)
+// );
+//REFACTORED TO INTERSECTION OBSERVER API BECAUSE OF MUCH BETTER PERFORMANCE
+//LECTURES
+//CREATING INTERESECTION OBSERVER
+//CREATING STICKY NAVIGATION USING INTERSECTION OBSERVER
+const obsCallback = function (entries) {
+  const [{ isIntersecting }] = entries;
+
+  switchStickyNavClass(!isIntersecting);
+};
+const obsOptions = {
+  //SET TO NULL IN ORDER TO INTERSECT BODY ELEMENT
+  root: null,
+  threshold: [0, 0.7],
+  rootMargin: `-${nav.getClientRects()[0].height}px`,
+};
+const headerObserver = new IntersectionObserver(obsCallback, obsOptions);
+
+const header = document.querySelector('header');
+headerObserver.observe(header);
+//CREATING STICKY NAVIGATION USING INTERSECTION OBSERVER
+const sectionsWithFadeAnimations = [...document.querySelectorAll('.section')];
+sectionsWithFadeAnimations.map(section =>
+  section.classList.add('section--hidden')
+);
+const sectionFadeAnimationObserver = new IntersectionObserver(
+  ([entry], observer) =>
+    entry.isIntersecting
+      ? (entry.target.classList.remove('section--hidden'),
+        //OBSERVER.UNOBSERVE == CLEAN UP FUNCTION TO EXCEUTE ANIMATION ONLY ONCE
+        observer.unobserve(entry.target))
+      : null,
+  // entry.target.classList.add('section--hidden'),
+  {
+    root: null,
+    threshold: 0.15,
+  }
+);
+sectionsWithFadeAnimations.forEach(section => {
+  sectionFadeAnimationObserver.observe(section);
+});
+//CREATING INTERESECTION OBSERVER
+//LECTURES
+//STICKY NAVIGATION
+//LECTURE
+//LECTURE LAZY LOADING IMAGES
+const lazyLoadingImgObserver = new IntersectionObserver(function (
+  entries,
+  observer
+) {
+  const [{ target, isIntersecting }] = entries;
+  isIntersecting
+    ? //BEFORE REFACTOR
+      // target.classList.remove('lazy-img'),
+      //BEFORE REFACTOR
+
+      (target.setAttribute('src', target.dataset.src),
+      //AFTER REFACTOR
+      //REMOVING CLASS AFTER IMAGE LOADS WITH ADD EVENTLISTENERS
+      target.addEventListener('load', () =>
+        target.classList.remove('lazy-img')
+      ))
+    : //ADD UNOBSERVE TO FIRE IT ONLY ONCE
+      // observer.unobserve(target)
+      //ADD UNOBSERVE TO FIRE IT ONLY ONCE
+      //REMOVING CLASS AFTER IMAGE LOADS WITH ADD EVENTLISTENERS
+      //AFTER REFACTOR
+      target.classList.add('lazy-img'),
+    { root: null, threshold: 0.2 };
+});
+const imagesLazyLoading = [
+  ...document.querySelector('.features').querySelectorAll('img[data-src]'),
+];
+imagesLazyLoading.forEach(imgLazyLoading => {
+  lazyLoadingImgObserver.observe(imgLazyLoading);
+});
+
+//LECTURE LAZY LOADING IMAGES
+//LECTURE BUILDING SLIDER
+const slides = [...document.querySelectorAll('.slide')];
+//SETTING SLIDES POSITION
+slides.map(
+  (slide, index) =>
+    //OLDER WAY
+    // slide.style.transform = `translateX(${100 * index}%)`
+    //OLDER WAY
+    //NEW WAY CHECK BACKWARDS COMPATIBILITY
+    (slide.style.translate = `${100 * index}%`)
+  // (slide.dataset.test = `${0 + index}`)
+  //NEW WAY CHECK BACKWARDS COMPATIBILITY
+);
+//SETTING SLIDES POSITION
+//SETTING DOTS
+
+const dotsContainer = document.querySelector('.dots');
+for (let index = 0; index < 3; index++) {
+  const dots = `<button class='dots__dot ${
+    index === 0 && 'dots__dot--active'
+  }' data-slide=${0}></button>`;
+  dotsContainer.insertAdjacentHTML('beforeend', dots);
+}
+//SETTING DOTS
+//SETTING ARROWS SLIDES ACTIONS
+const arrowBtns = [
+  ...document.querySelector('.slider').querySelectorAll('.slider__btn'),
+];
+
+function handleAnimationSlide() {}
+
+const [leftBtn, rightBtn] = arrowBtns;
+rightBtn.addEventListener('click', function (e) {
+  const switchBoolean =
+    parseInt(slides[slides.length - 1].style.translate) === 0;
+  !switchBoolean
+    ? slides.map(
+        (slide, i) =>
+          (slide.style.translate = `${parseInt(slide.style.translate) - 100}%`)
+      )
+    : slides.map(
+        (slide, i, arr) =>
+          (i === 0 && (slide.style.translate = `${parseInt(i)}%`)) ||
+          (slide.style.translate = `${parseInt(i * 100)}%`)
+
+        // (slide.style.translate = `${parseInt(
+        //   arr[arr.length - i - 1].style.translate
+        // )}%`)
+      );
+});
+leftBtn.addEventListener('click', function (e) {
+  const switchBoolean = parseInt(slides[0].style.translate) === 0;
+  !switchBoolean
+    ? slides.map(
+        (slide, i) =>
+          (slide.style.translate = `${parseInt(slide.style.translate) + 100}%`)
+      )
+    : slides.map(
+        (slide, i, arr) =>
+          (i === arr.length - 1 &&
+            (slide.style.translate = `${parseInt(0)}%`)) ||
+          (slide.style.translate = `${parseInt(arr.length - i - 1) * -100}%`)
+
+        // (slide.style.translate = `${parseInt(
+        //   arr[arr.length - i - 1].style.translate
+        // )}%`)
+      );
+});
+// arrowBtns.forEach(btn => {
+//   btn.addEventListener('click', function (e) {
+
+//   });
+// });
+//BEFORE REFACTOR
+//SETTING ARROWS SLIDES ACTIONS
+
+//LECTURE BUILDING SLIDER
