@@ -59,148 +59,13 @@ btnScrollTo.addEventListener('click', () => {
   //LECTURE
   //OLD SCHOOL WAY OF SCROLLING TO AN ELEMENT
 });
-//LECTURE
-//LECTURE EVENTS
 
-// const h1 = document.querySelector('h1');
-// h1.addEventListener('mouseenter', e => alert('on h1!', e.target));
-//OLD SCHOOL WAY
-// h1.onmouseleave = () => alert('leaving h1 !');
-//OLD SCHOOL WAY
-//ADDING AND REMOVING EVENTLISTENERS
-// const alertMsg = () => {
-//   alert('enter h1');
-// };
-// h1.addEventListener('mouseenter', alertMsg);
-// setTimeout(() => {
-//   h1.removeEventListener('mouseenter', alertMsg);
-// }, 1500);
-
-//LECTURE EVENTS
-//LECTURE EVENT PROPAGATION IN PRACTICE
-// const randomInt = (min, max) =>
-//   Math.floor(Math.random() * (max - min - 1) + min);
-// const randomColor = () =>
-//   `rgb(${randomInt(0, 255)},${randomInt(0, 255)},${randomInt(0, 255)})`;
-// document.querySelector('.nav__link').addEventListener('click', function (e) {
-//   //importantComment  stops bubbling
-//   e.stopPropagation();
-//   console.log('link ', e.target);
-//   console.log('current target ', e.currentTarget);
-//   //importantComment  stops bubbling
-//   this.style.backgroundColor = randomColor();
-// });
-// document.querySelector('.nav__links').addEventListener('click', function (e) {
-//   console.log('nav links ', e.target);
-//   console.log('current target ', e.currentTarget);
-//   this.style.backgroundColor = randomColor();
-// });
-// document.querySelector('.nav').addEventListener(
-//   'click',
-//   function (e) {
-//     console.log('nav  ', e.target);
-//     console.log('current target ', e.currentTarget);
-//     this.style.backgroundColor = randomColor();
-//   },
-//   //CAPTURE PARAMETER CHANGES DE ORDER THAT OBJECT LISTENS TO EVENTS SETTING TO TRUE BECOMES THE FIRST ONE THAT LISTENS
-//   //default value == false
-//   true
-// );
-// document
-//   .querySelector('.nav')
-//   .addEventListener('click', () => console.log('link'));
-//LECTURE EVENT PROPAGATION IN PRACTICE
-//LECTURE DOM TRAVERSING
-//SELECTING CHILDREN
-// console.log(h1.querySelectorAll('.highlight'));
-// console.log(h1.childNodes);
-//importantComment .CHILDREN ONLY RETURNS DIRECT CHILDS
-// console.log(h1.children);
-//importantComment .CHILDREN ONLY RETURNS DIRECT CHILDS
-// h1.firstElementChild.style.color = 'white';
-// h1.lastElementChild.style.color = 'lime';
-//SELECTING CHILDREN
-//SELECTING PARENTS
-// console.log(h1.parentNode);
-// console.log(h1.parentElement);
-// h1.closest('.header').style.background = 'var(--gradient-secondary)';
-//SELECTING PARENTS
-//SELECTING SIBLINGS
-//SELECTING HTML ELEMENTS
-// console.log(h1.previousElementSibling);
-// console.log(h1.nextElementSibling);
-//SELECTING HTML ELEMENTS
-//SELECTING NODES
-// console.log(h1.previousSibling);
-// console.log(h1.nextSibling);
-// [...h1.parentElement.children].forEach(el => {
-//   if (el !== h1) {
-//     el.style.textDecoration = 'underline';
-//   }
-// });
-//SELECTING NODES
-//SELECTING SIBLINGS
-//LECTURE DOM TRAVERSING
-//LECTURE
-//IMPLEMENTING TABS SECTION
-
-//BEFORE REFACTOR
-// (this.querySelectorAll('.btn').forEach(btn =>
-//   btn.classList.remove('operations__tab--active')
-// ),
-// e.target.classList.add('operations__tab--active'))
-//BEFORE REFACTOR
-//AFTER REFACTOR
 const tabsContainer = document.querySelector('.operations__tab-container');
 const switchVisibleEl = (elementsArray, elementToShow, classToSwitch) => (
   elementsArray.forEach(element => element.classList.remove(classToSwitch)),
   elementToShow.classList.add(classToSwitch)
 );
-//AFTER REFACTOR
 
-//importantComment TABS IMPLEMENTATION
-//BEFORE REFACTOR
-// tabsContainer.addEventListener('click', function (e) {
-//   if (!e.target.closest('.btn')) return;
-//   return e.target.classList.contains('btn')
-//     ? (switchVisibleEl(
-//         this.querySelectorAll('.btn'),
-//         e.target || e.target.closest('.btn'),
-//         'operations__tab--active'
-//       ),
-//       switchVisibleEl(
-//         this.parentElement.querySelectorAll('.operations__content'),
-//         [...this.parentElement.querySelectorAll('.operations__content')].filter(
-//           content =>
-//             content.classList.contains(
-//               `operations__content--${e.target.dataset.tab}`
-//             )
-//         )[0],
-//         'operations__content--active'
-//       ))
-//     : e.target.closest('.btn').classList.contains('btn')
-//     ? (console.log(e.target),
-//       switchVisibleEl(
-//         this.querySelectorAll('.btn'),
-//         e.target.closest('.btn'),
-//         'operations__tab--active'
-//       ),
-//       switchVisibleEl(
-//         this.parentElement.parentElement.querySelectorAll(
-//           '.operations__content'
-//         ),
-//         [...this.parentElement.querySelectorAll('.operations__content')].filter(
-//           content =>
-//             content.classList.contains(
-//               `operations__content--${e.target.closest('.btn').dataset.tab}`
-//             )
-//         )[0],
-//         'operations__content--active'
-//       ))
-//     : null;
-// });
-//BEFORE REFACTOR
-//AFTER REFACTOR
 const filterTabToDisplay = (tabs, tabIndex) =>
   tabs.filter(tab =>
     tab.classList.contains(`operations__content--${tabIndex}`)
@@ -237,11 +102,10 @@ tabsContainer.addEventListener('click', function (e) {
       ))
     : null;
 });
-//AFTER REFACTOR
+
 //importantComment TABS IMPLEMENTATION
 //IMPLEMENTING TABS SECTION
-//LECTURE
-//LECTURE
+
 //IMPLEMENTING LIGHTER OPACITY IN ELEMENTS OF NAV EXCEPT IN THE ONE THATS HOVERED
 //WORKING
 //importantComment MOUSE EVENTS = MOUSEENTER DOESN'T BUBBLE , MOUSEOVER YES IT DOES
@@ -252,89 +116,34 @@ const setOpacityNavItem = (el, opacity = 1) =>
   el.style ? (el.style.opacity = opacity) : null;
 //SETTING OPACTIY ON HOVER OR MOUSEOUT
 function handleHoverNav(e, notTargetOpacity) {
-  // console.log(e.currentTarget.querySelector('img'));
-
   const navLinks = [
     ...e.currentTarget.querySelectorAll('li'),
     e.currentTarget.querySelector('img'),
   ];
   // console.log(navLinks);
   e.target.classList.contains('nav__link')
-    ? navLinks
-        //BEFORE REFACTOR
-        // .filter(el => {
-        //   return (
-        //     el.firstElementChild.getAttribute('href') !==
-        //     e.target.getAttribute('href')
-        //   );
-        // })
-        // .concat(e.currentTarget.querySelector('img'))
-        //BEFORE REFACTOR
-        //AFTER REFACTOR
-        .forEach(el => {
-          if (
-            (el.firstElementChild &&
-              el.firstElementChild.getAttribute('href') !==
-                e.target.getAttribute('href')) ||
-            !el.firstElementChild
-          )
-            setOpacityNavItem(el, notTargetOpacity);
-        })
-    : //AFTER REFACTOR
-      null;
+    ? navLinks.forEach(el => {
+        if (
+          (el.firstElementChild &&
+            el.firstElementChild.getAttribute('href') !==
+              e.target.getAttribute('href')) ||
+          !el.firstElementChild
+        )
+          setOpacityNavItem(el, notTargetOpacity);
+      })
+    : null;
 }
-//FINISHED FINAL REFACTOR
+//IMPLEMENTING LIGHTER OPACITY IN ELEMENTS OF NAV EXCEPT IN THE ONE THATS HOVERED
 nav.addEventListener('mouseover', function (e) {
   handleHoverNav(e, 0.5);
 });
-//FINISHED FINAL REFACTOR
+
 nav.addEventListener('mouseout', function (e) {
   handleHoverNav(e, 1);
 });
-// nav.addEventListener('mouseover', e => {
-//   console.log(e.currentTarget.querySelector('img'));
-
-//   const navLinks = [
-//     ...e.currentTarget.querySelectorAll('li'),
-//     e.currentTarget.querySelector('img'),
-//   ];
-//   console.log(navLinks);
-//   e.target.classList.contains('nav__link')
-//     ? navLinks
-//         //BEFORE REFACTOR
-//         // .filter(el => {
-//         //   return (
-//         //     el.firstElementChild.getAttribute('href') !==
-//         //     e.target.getAttribute('href')
-//         //   );
-//         // })
-//         // .concat(e.currentTarget.querySelector('img'))
-//         //BEFORE REFACTOR
-//         //AFTER REFACTOR
-//         .forEach(el => {
-//           if (
-//             (el.firstElementChild &&
-//               el.firstElementChild.getAttribute('href') !==
-//                 e.target.getAttribute('href')) ||
-//             !el.firstElementChild
-//           )
-//             setOpacityNavItem(el, 0.5);
-//         })
-//     : //AFTER REFACTOR
-//       null;
-// });
-
-// nav.addEventListener('mouseout', function (e) {
-//   return [
-//     e.currentTarget.querySelector('img'),
-//     ...e.currentTarget.querySelectorAll('li'),
-//   ].forEach(el => setOpacityNavItem(el, undefined));
-// });
 
 //IMPLEMENTING LIGHTER OPACITY IN ELEMENTS OF NAV EXCEPT IN THE ONE THATS HOVERED
-//WORKING
-//LECTURE
-//LECTURE
+
 //STICKY NAVIGATION
 //ALTERNATE WAY OFF GETTIG OFFSET TOP ELEMENT COORDS
 const { top: coordTop0 } = section1.getBoundingClientRect();
@@ -345,12 +154,7 @@ const switchStickyNavClass = scrollPositionTrigger => {
     ? nav.classList.add('sticky')
     : nav.classList.remove('sticky');
 };
-//REFACTORED TO INTERSECTION OBSERVER API BECAUSE OF MUCH BETTER PERFORMANCE
-// window.addEventListener('scroll', () =>
-//   switchStickyNavClass(window.scrollY >= section1.offsetTop)
-// );
-//REFACTORED TO INTERSECTION OBSERVER API BECAUSE OF MUCH BETTER PERFORMANCE
-//LECTURES
+
 //CREATING INTERESECTION OBSERVER
 //CREATING STICKY NAVIGATION USING INTERSECTION OBSERVER
 const obsCallback = function (entries) {
@@ -377,10 +181,10 @@ const sectionFadeAnimationObserver = new IntersectionObserver(
   ([entry], observer) =>
     entry.isIntersecting
       ? (entry.target.classList.remove('section--hidden'),
-        //OBSERVER.UNOBSERVE == CLEAN UP FUNCTION TO EXCEUTE ANIMATION ONLY ONCE
+        //OBSERVER.UNOBSERVE == CLEAN UP FUNCTION TO EXECUTE ANIMATION ONLY ONCE
         observer.unobserve(entry.target))
       : null,
-  // entry.target.classList.add('section--hidden'),
+
   {
     root: null,
     threshold: 0.15,
@@ -390,22 +194,17 @@ sectionsWithFadeAnimations.forEach(section => {
   sectionFadeAnimationObserver.observe(section);
 });
 //CREATING INTERESECTION OBSERVER
-//LECTURES
+
 //STICKY NAVIGATION
-//LECTURE
-//LECTURE LAZY LOADING IMAGES
+
+// LAZY LOADING IMAGES
 const lazyLoadingImgObserver = new IntersectionObserver(function (
   entries,
   observer
 ) {
   const [{ target, isIntersecting }] = entries;
   isIntersecting
-    ? //BEFORE REFACTOR
-      // target.classList.remove('lazy-img'),
-      //BEFORE REFACTOR
-
-      (target.setAttribute('src', target.dataset.src),
-      //AFTER REFACTOR
+    ? (target.setAttribute('src', target.dataset.src),
       //REMOVING CLASS AFTER IMAGE LOADS WITH ADD EVENTLISTENERS
       target.addEventListener('load', () =>
         target.classList.remove('lazy-img')
@@ -425,8 +224,7 @@ imagesLazyLoading.forEach(imgLazyLoading => {
   lazyLoadingImgObserver.observe(imgLazyLoading);
 });
 
-//LECTURE LAZY LOADING IMAGES
-//LECTURE BUILDING SLIDER
+//BUILDING SLIDER
 const slides = [...document.querySelectorAll('.slide')];
 //SETTING SLIDES POSITION
 slides.map(
@@ -446,7 +244,7 @@ const dotsContainer = document.querySelector('.dots');
 for (let index = 0; index < 3; index++) {
   const dots = `<button class='dots__dot ${
     index === 0 && 'dots__dot--active'
-  }' data-slide=${0}></button>`;
+  }' data-slide=${index}></button>`;
   dotsContainer.insertAdjacentHTML('beforeend', dots);
 }
 
@@ -456,43 +254,38 @@ const arrowBtns = [
   ...document.querySelector('.slider').querySelectorAll('.slider__btn'),
 ];
 
-function handleAnimationSlide() {}
-
-const [leftBtn, rightBtn] = arrowBtns;
-rightBtn.addEventListener('click', function (e) {
+//SETTING ARROWS SLIDES ACTIONS
+const moveSlides = (switchBooleanIndex, movementDirection, resetPosition) => {
   const switchBoolean =
-    parseInt(slides[slides.length - 1].style.translate) === 0;
+    parseInt(slides[switchBooleanIndex].style.translate) === 0;
   !switchBoolean
     ? slides.map(
         (slide, i) =>
-          (slide.style.translate = `${parseInt(slide.style.translate) - 100}%`)
+          (slide.style.translate = `${
+            parseInt(slide.style.translate) + movementDirection
+          }%`)
       )
     : slides.map(
         (slide, i, arr) =>
-          (i === 0 && (slide.style.translate = `${parseInt(i)}%`)) ||
-          (slide.style.translate = `${parseInt(i * 100)}%`)
-      );
-  setActiveClassDots(
-    slides.findIndex(slide => parseInt(slide.style.translate) === 0)
-  );
-});
-leftBtn.addEventListener('click', function (e) {
-  const switchBoolean = parseInt(slides[0].style.translate) === 0;
-  !switchBoolean
-    ? slides.map(
-        (slide, i) =>
-          (slide.style.translate = `${parseInt(slide.style.translate) + 100}%`)
-      )
-    : slides.map(
-        (slide, i, arr) =>
-          (i === arr.length - 1 &&
+          (i === slides.length - 1 - switchBooleanIndex &&
             (slide.style.translate = `${parseInt(0)}%`)) ||
-          (slide.style.translate = `${parseInt(arr.length - i - 1) * -100}%`)
+          (slide.style.translate = `${resetPosition(i, slides)}%`)
       );
   setActiveClassDots(
     slides.findIndex(slide => parseInt(slide.style.translate) === 0)
   );
-});
+};
+//SETTING ARROWS SLIDES ACTIONS
+const sliderContainer = document.querySelector('.slider');
+
+sliderContainer.addEventListener('click', e =>
+  e.target.classList.contains('slider__btn--left')
+    ? moveSlides(0, 100, (i, arr) => parseInt(arr.length - i - 1) * -100)
+    : e.target.classList.contains('slider__btn--right')
+    ? moveSlides(slides.length - 1, -100, i => parseInt(i * 100))
+    : null
+);
+
 const setActiveClassDots = activeSlide =>
   [...dotsContainer.children].forEach((dot, index) => {
     index !== activeSlide
@@ -500,12 +293,38 @@ const setActiveClassDots = activeSlide =>
       : dot.classList.add('dots__dot--active');
   });
 
-// arrowBtns.forEach(btn => {
-//   btn.addEventListener('click', function (e) {
+dotsContainer.addEventListener('click', function (e) {
+  if (!e.target.dataset.slide) return;
+  slides.map((slide, index) =>
+    index < e.target.dataset.slide
+      ? (slide.style.translate = `${parseInt(slide.style.translate) - 100}%`)
+      : index > e.target.dataset.slide
+      ? (slide.style.translate = `${parseInt(slide.style.translate) + 100}%`)
+      : (slide.style.translate = '0%')
+  ),
+    setActiveClassDots(
+      slides.findIndex(slide => parseInt(slide.style.translate) === 0)
+    );
+});
+//SETTING MOVING SLIDES WHEN KEY LEFT OR KEY RIGHT ARE PRESSED
+const sliderObserver = new IntersectionObserver(
+  function (entries, observer) {
+    const [{ target, isIntersecting }] = entries;
 
-//   });
-// });
-//BEFORE REFACTOR
-//SETTING ARROWS SLIDES ACTIONS
-
-//LECTURE BUILDING SLIDER
+    !isIntersecting && null;
+    isIntersecting &&
+      document.addEventListener('keydown', e => {
+        e.key === 'ArrowLeft'
+          ? moveSlides(0, 100, (i, arr) => parseInt(arr.length - i - 1) * -100)
+          : e.key === 'ArrowRight'
+          ? moveSlides(slides.length - 1, -100, i => parseInt(i * 100))
+          : null;
+      });
+  },
+  {
+    root: null,
+    threshold: 0.3,
+  }
+);
+//SETTING MOVING SLIDES WHEN KEY LEFT OR KEY RIGHT ARE PRESSED
+sliderObserver.observe(sliderContainer);
